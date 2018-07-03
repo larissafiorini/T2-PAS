@@ -9,8 +9,8 @@ var mockLances = require('./mocks/mockLances');
 //SOCKET
 var net = require('net');
 
-var HOST = '192.168.0.134';
-var PORT = 1234;
+var HOST = '192.168.0.3';
+var PORT = 3000;
 
 var client = new net.Socket();
 //
@@ -56,15 +56,16 @@ app.post('/addLance', (req, res) => {
 	var body = req.body;
 	var novoLance = new Lancamento(body);
 	listLances.push(novoLance);
-    res.json({status:'ok'});
-    client.on('data', function() {
-        console.log('Client connected to: ' + HOST + ':' + PORT);
-        // Write a message to the socket as soon as the client is connected, the server will receive it as message from the client
-        client.write('Nome do Produto: ' + body.nomeProduto);
-        client.write('Nome do Comprador: ' + body.nomeComprador);
-        client.write('Valor: ' + body.valor);
-        client.destroy();
-    });
+  res.json({status:'ok'});
+  client.emit('novoLance', { lance: novoLance });
+    // client.on('novoLance', function() {
+    //     console.log('Client connected to: ' + HOST + ':' + PORT);
+    //     // Write a message to the socket as soon as the client is connected, the server will receive it as message from the client
+    //     client.write('Nome do Produto: ' + body.nomeProduto);
+    //     client.write('Nome do Comprador: ' + body.nomeComprador);
+    //     client.write('Valor: ' + body.valor);
+    //     client.destroy();
+    // });
 });
 
 app.listen(3000, () => console.log('Leilões rodando na porta 3000!'));
@@ -74,5 +75,11 @@ client.connect(PORT, HOST, function() {
     // Write a message to the socket as soon as the client is connected, the server will receive it as message from the client
     client.write('Hello World!');
     client.write('Hello DO MATHIAS!');
+});
 
+client.on('novoLance', function(data) {
+    console.log(data);
+    app.get('/ultimoLance', (req, res) => {
+      res.json(data)
+    });
 });
