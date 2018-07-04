@@ -79,11 +79,8 @@ client.connect(PORT, HOST, function() {
     // Write a message to the socket as soon as the client is connected, the server will receive it as message from the client
     // client.write('Hello World!');
     // client.write('Hello DO MATHIAS!');
-    socket.sendMessage({
-      nomeProduto: "Gameboy",
-      nomeComprador: "Seu zé",
-      valor: 250
-      });
+    socket.sendMessage({nomeProduto: 'Gameboy', nomeComprador: 'Seu zé', valor: 250});
+
     // client.emit('novoLance', {a: 5, b: 7});
 });
 
