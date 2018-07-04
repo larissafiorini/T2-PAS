@@ -94,9 +94,14 @@ client.on('data', function(data) {
     if (objString.indexOf("[") != -1) {
       objString = objString.substring(objString.indexOf("["));
       console.log('objString ' + objString);
-      var obj = JSON.parse(objString);
-      app.get('/listLances', (req, res) => {
-        res.json(obj)
-      });
+      var obj = JSON.parse(objString)
+      if(objString.includes('nomeProduto')){
+        app.get('/listLances', (req, res) => {
+          res.json(obj)
+        });
+      }
+      else if(objString.includes('produto')) {
+        app.get('/listProdutos', (req, res) => res.json(obj));
+      }
     }
 });
