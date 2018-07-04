@@ -52,7 +52,8 @@ app.post('/addProduto', (req, res) => {
 	var body = req.body;
 	var novoProduto = new Produto(body);
 	listProdutos.push(novoProduto);
-	res.json({status:'ok'});
+  socket.sendMessage(novoProduto);
+	// res.json({status:'ok'});
 });
 app.get('/listLances', (req, res) => {
   //fazer busca aqui
