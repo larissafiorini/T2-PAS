@@ -11,7 +11,7 @@ var net = require('net');
 JsonSocket = require('json-socket');
 
 
-var HOST = '192.168.0.9';
+var HOST = '192.168.0.134';
 var PORT = 1234;
 
 var client = new net.Socket();
@@ -87,9 +87,16 @@ client.connect(PORT, HOST, function() {
     // client.emit('novoLance', {a: 5, b: 7});
 });
 
-// client.on('novoLance', function(data) {
-//     client.write("Comprador " + data['lance'].nomeComprador + " fez lançamento de R$ " + data['lance'].valor + " para o produto " + data['lance'].nomeProduto);
-//     app.get('/ultimoLance', (req, res) => {
-//       res.json(data)
-//     });
-// });
+client.on('data', function(data) {
+    // client.write("Comprador " + data['lance'].nomeComprador + " fez lançamento de R$ " + data['lance'].valor + " para o produto " + data['lance'].nomeProduto);
+    console.log('data ' + data);
+    var objString = String(data);
+    if (objString.indexOf("[") != -1) {
+      objString = objString.substring(objString.indexOf("["));
+      console.log('objString ' + objString);
+      var obj = JSON.parse(objString);
+      app.get('/listLances', (req, res) => {
+        res.json(obj)
+      });
+    }
+});
