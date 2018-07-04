@@ -54,13 +54,16 @@ app.post('/addProduto', (req, res) => {
 	listProdutos.push(novoProduto);
 	res.json({status:'ok'});
 });
-app.get('/listLances', (req, res) => res.json(listLances));
+app.get('/listLances', (req, res) => {
+  //fazer busca aqui
+  res.json(listLances);
+});
 app.post('/addLance', (req, res) => {
 	var body = req.body;
 	var novoLance = new Lancamento(body);
 	listLances.push(novoLance);
   res.json({status:'ok'});
-  socket.sendMessage({a: 5, b: 7});
+  socket.sendMessage(novoLance);
   client.emit('novoLance', { lance: novoLance });
     // client.on('novoLance', function() {
     //     console.log('Client connected to: ' + HOST + ':' + PORT);
@@ -79,7 +82,7 @@ client.connect(PORT, HOST, function() {
     // Write a message to the socket as soon as the client is connected, the server will receive it as message from the client
     // client.write('Hello World!');
     // client.write('Hello DO MATHIAS!');
-    socket.sendMessage({nomeProduto: 'Gameboy', nomeComprador: 'Seu zé', valor: 250});
+    // socket.sendMessage({nomeProduto: 'Gameboy', nomeComprador: 'Seu zé', valor: 250});
 
     // client.emit('novoLance', {a: 5, b: 7});
 });
